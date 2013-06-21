@@ -2,7 +2,6 @@ package MGA::Git;
 
 use strict;
 use YAML qw(LoadFile);
-use IO::File;
 use Template;
 use File::Slurp;
 use feature 'state';
