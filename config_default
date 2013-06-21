@@ -1,0 +1,7 @@
+---
+tmpl_dir: /usr/share/mgagit/tmpl
+gitolite_config: /var/lib/git/.gitolite/conf/gitolite.conf
+repos_config:
+  - prefix: software
+    include_dir: /var/lib/git/repos/software
+    gl_template: soft_repo

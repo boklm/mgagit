@@ -1,0 +1,79 @@
+#!/usr/bin/perl -w
+
+use strict;
+use MGA::Git;
+#use Data::Dump qw/dd/;
+
+my %actions = (
+    glconf => {
+        run  => \&glconf,
+        descr => 'Print gitolite configuration',
+        usage => <<END,
+$0 glconf [repo]
+
+Print the gitolite configuration. Optionaly you can add a repository
+name as parameter to display the configuration for this repository only.
+END
+    },
+    glrun  => {
+        run  => \&glrun,
+        descr => 'Update gitolite configuration',
+        usage => <<END,
+$0 glrun
+
+Update gitolite configuration, and run gitolite if changed.
+END
+    },
+    usage  => {
+        run   => \&usage,
+        descr => 'Show usage informations for an action',
+        usage => <<END,
+$0 usage [action]
+
+Show action usage
+END
+    },
+);
+
+sub usage {
+    if ($_[1] && $actions{$_[1]}) {
+        print STDERR $actions{$_[1]}->{usage};
+    } else {
+        print STDERR "$0 [action] [options]\n";
+        print STDERR "$0 usage [action]\n\n";
+        print STDERR "Available actions:\n";
+        print STDERR map { " - $_ : $actions{$_}->{descr}\n" } keys %actions;
+    }
+}
+sub usageexit {
+    usage(@_);
+    exit 1;
+}
+
+sub glconf {
+    usageexit('usage', $_[0]) unless @_ <= 2;
+    my %r;
+    MGA::Git::load_gitrepos(\%r);
+    if (my $repo = $_[1]) {
+        if (!$r{repos}{$repo}) {
+            print STDERR "Cannot find repository $repo\n";
+            exit 1;
+        }
+        print MGA::Git::gitolite_repo_config(\%r, $repo);
+    } else {
+        print MGA::Git::gitolite_config(\%r), "\n";
+    }
+}
+
+sub glrun {
+    usageexit('usage', $_[0]) unless @_ == 1;
+    my %r;
+    MGA::Git::load_gitrepos(\%r);
+    MGA::Git::update_gitolite_config(\%r);
+}
+
+if (@ARGV == 0 || !$actions{$ARGV[0]}) {
+    usageexit();
+}
+$actions{$ARGV[0]}->{run}->(@ARGV);
+
