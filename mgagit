@@ -54,6 +54,7 @@ sub glconf {
     usageexit('usage', $_[0]) unless @_ <= 2;
     my %r;
     MGA::Git::load_gitrepos(\%r);
+    MGA::Git::load_groups(\%r) if @_ == 1;
     if (my $repo = $_[1]) {
         if (!$r{repos}{$repo}) {
             print STDERR "Cannot find repository $repo\n";
@@ -69,6 +70,7 @@ sub glrun {
     usageexit('usage', $_[0]) unless @_ == 1;
     my %r;
     MGA::Git::load_gitrepos(\%r);
+    MGA::Git::load_groups(\%r);
     MGA::Git::update_gitolite_config(\%r);
 }
 

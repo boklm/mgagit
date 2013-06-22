@@ -4,6 +4,7 @@ use strict;
 use YAML qw(LoadFile);
 use Template;
 use File::Slurp;
+use Net::LDAP;
 use feature 'state';
 use Data::Dump qw/dd/;
 
@@ -42,6 +43,40 @@ sub load_gitrepos {
     }
 }
 
+sub get_ldap {
+    state $ldap;
+    return $ldap if $ldap;
+    my $bindpw = read_file($config->{bindpwfile}) 
+        or die "Error reading $config->{bindpwfile}";
+    chomp $bindpw;
+    $ldap = Net::LDAP->new($config->{ldapserver}) or die "$@";
+    my $m = $ldap->start_tls(verify => 'none');
+    die $m->error if $m->is_error;
+    $m = $ldap->bind($config->{binddn}, password => $bindpw);
+    die $m->error if $m->is_error;
+    return $ldap;
+}
+
+sub re {
+    my ($re, $txt) = @_;
+    my $rr = qr/$config->{$re}/;
+    $txt =~ s/$rr/$1/;
+    return $txt;
+}
+
+sub load_groups {
+    my ($r) = @_;
+    my $ldap = get_ldap;
+    my $m = $ldap->search(
+        base => $config->{groupbase},
+        filter => $config->{groupfilter},
+    );
+    my $res = $m->as_struct;
+    @{$r->{groups}}{map { re('group_re', $_) } keys %$res} =
+        map { [ map { re('uid_username_re', $_) } @{$_->{member}} ] }
+        values %$res;
+}
+
 sub get_tmpl {
     my ($name, $ext) = @_;
     state %tmpl;
@@ -52,25 +87,41 @@ sub get_tmpl {
     return $tmpl{"$name.$ext"};
 }
 
-sub gitolite_repo_config {
-    my ($r, $repo) = @_;
+sub process_tmpl {
+    my ($tmplname, $ext, $vars) = @_;
     my $tt = Template->new;
-    my $tmpl = get_tmpl($r->{repos}{$repo}{gl_template}, 'gl');
-    my $vars = {
-        r      => $r,
-        repo   => $repo,
-        config => $config,
-    };
+    my $tmpl = get_tmpl($tmplname, $ext);
     my $c;
     $tt->process(\$tmpl, $vars, \$c);
     return $c;
 }
 
+sub gitolite_repo_config {
+    my ($r, $repo) = @_;
+    my $vars = {
+        r      => $r,
+        repo   => $repo,
+        config => $config,
+    };
+    return process_tmpl($r->{repos}{$repo}{gl_template}, 'gl', $vars);
+}
+
+sub gitolite_group_config {
+    my ($r, $group) = @_;
+    my $vars = {
+        r      => $r,
+        group  => $group,
+        config => $config,
+    };
+    return process_tmpl('group', 'gl', $vars);
+}
+
 sub gitolite_config {
     my ($r) = @_;
-    my @repos;
+    my (@repos, @groups);
     @repos = map { gitolite_repo_config($r, $_) } sort keys %{$r->{repos}};
-    return join("\n", @repos);
+    @groups = map { gitolite_group_config($r, $_) } sort keys %{$r->{groups}};
+    return join("\n", @groups, @repos);
 }
 
 sub update_gitolite_config {
