@@ -4,8 +4,11 @@ binddn: uid=mgagit,ou=People,dc=mageia,dc=org
 bindpwfile: /etc/mgagit.secret
 groupbase: ou=Group,dc=mageia,dc=org
 groupfilter: '(objectClass=groupOfNames)'
+userbase: ou=People,dc=mageia,dc=org
+userfilter: '(&(objectClass=inetOrgPerson)(objectClass=posixAccount)(objectClass=ldapPublicKey))'
 uid_username_re: '^uid=(.+),ou=People,dc=mageia,dc=org$'
 group_re: '^cn=(.+),ou=Group,dc=mageia,dc=org$'
+pubkey_dir: /var/lib/git/.gitolite/keydir
 tmpl_dir: /usr/share/mgagit/tmpl
 gitolite_config: /var/lib/git/.gitolite/conf/gitolite.conf
 repos_config:

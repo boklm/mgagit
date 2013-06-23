@@ -71,6 +71,8 @@ sub glrun {
     my %r;
     MGA::Git::load_gitrepos(\%r);
     MGA::Git::load_groups(\%r);
+    MGA::Git::load_users(\%r);
+    MGA::Git::update_gitolite_keydir(\%r);
     MGA::Git::update_gitolite_config(\%r);
 }
 

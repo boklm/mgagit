@@ -78,6 +78,17 @@ sub load_groups {
         values %$res;
 }
 
+sub load_users {
+    my ($r) = @_;
+    my $ldap = get_ldap;
+    my $m = $ldap->search(
+        base => $config->{userbase},
+        filter => $config->{userfilter},
+    );
+    my @users = grep { $_->{sshpublickey} } values %{$m->as_struct};
+    @{$r->{users}}{map { $_->{uid}[0] } @users} = map { $_->{sshpublickey} } @users;
+}
+
 sub get_tmpl {
     my ($name, $ext) = @_;
     state %tmpl;
@@ -123,6 +134,39 @@ sub gitolite_config {
     @repos = map { gitolite_repo_config($r, $_) } sort keys %{$r->{repos}};
     @groups = map { gitolite_group_config($r, $_) } sort keys %{$r->{groups}};
     return join("\n", @groups, @repos);
+}
+
+sub update_gitolite_keydir {
+    my ($r) = @_;
+    opendir(my $dh, $config->{pubkey_dir})
+        || die "Error opening $config->{include_dir}: $!";
+    my @files = grep { ! m/^\./ } readdir($dh);
+    closedir $dh;
+    my %users_old;
+    @users_old{@files} = map { read_file("$config->{pubkey_dir}/$_") } @files;
+    my %users_new;
+    foreach my $u (keys %{$r->{users}}) {
+        my $i = 0;
+        foreach my $key (@{$r->{users}{$u}}) {
+            next unless $key;
+            $users_new{"$u\@$i.pub"} = $key;
+            $i++;
+        }
+    }
+    foreach my $file (keys %users_old) {
+        if (!$users_new{$file}) {
+            print "Removing $file\n";
+            unlink "$config->{pubkey_dir}/$file";
+            $r->{keydir_changed} = 1;
+        }
+    }
+    foreach my $file (keys %users_new) {
+        if (!$users_old{$file} || chomp $users_old{$file} ne chomp $users_new{$file}) {
+            print "Writing $file\n";
+            write_file("$config->{pubkey_dir}/$file", $users_new{$file});
+            $r->{keydir_changed} = 1;
+        }
+    }
 }
 
 sub update_gitolite_config {
