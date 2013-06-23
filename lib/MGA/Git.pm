@@ -174,12 +174,20 @@ sub update_gitolite_config {
     my $oldconf = -f $config->{gitolite_config} 
                 ? read_file($config->{gitolite_config}) : '';
     my $newconf = gitolite_config($r);
-    if ($oldconf eq $newconf) {
-        print "Gitolite config didn't change\n";
-        return;
+    if ($oldconf ne $newconf) {
+        write_file($config->{gitolite_config}, $newconf);
+        $r->{glconf_changed} = 1;
     }
-    write_file($config->{gitolite_config}, $newconf);
-    print "TODO: Run gitolite\n";
+}
+
+sub run_gitolite {
+    my ($r) = @_;
+    if ($config->{run_gitolite} && $config->{run_gitolite} eq 'yes'
+        && ($r->{keydir_changed} || $r->{glconf_changed})) {
+        system('gitolite', 'compile');
+        system('gitolite', 'setup', '--hooks-only');
+        system('gitolite', 'trigger', 'POST_COMPILE');
+    }
 }
 
 1;

@@ -74,6 +74,7 @@ sub glrun {
     MGA::Git::load_users(\%r);
     MGA::Git::update_gitolite_keydir(\%r);
     MGA::Git::update_gitolite_config(\%r);
+    MGA::Git::run_gitolite(\%r);
 }
 
 if (@ARGV == 0 || !$actions{$ARGV[0]}) {
