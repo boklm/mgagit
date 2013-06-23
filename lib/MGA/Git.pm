@@ -33,6 +33,7 @@ sub load_gitrepos_dir {
             @{$repos->{$name}}{keys %$infos} = values %$infos;
         }
     }
+    closedir $dh;
 }
 
 sub load_gitrepos {
