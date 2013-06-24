@@ -67,6 +67,7 @@ sub re {
 
 sub load_groups {
     my ($r) = @_;
+    return unless $config->{use_ldap} eq 'yes';
     my $ldap = get_ldap;
     my $m = $ldap->search(
         base => $config->{groupbase},
@@ -80,6 +81,7 @@ sub load_groups {
 
 sub load_users {
     my ($r) = @_;
+    return unless $config->{use_ldap} eq 'yes';
     my $ldap = get_ldap;
     my $m = $ldap->search(
         base => $config->{userbase},

@@ -1,4 +1,5 @@
 ---
+use_ldap: no
 ldapserver: ldap.mageia.org
 binddn: uid=mgagit,ou=People,dc=mageia,dc=org
 bindpwfile: /etc/mgagit.secret
