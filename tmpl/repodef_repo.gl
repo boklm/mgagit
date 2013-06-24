@@ -1,0 +1,4 @@
+repo [% repo %]
+   RW  master     = [% r.repos.$repo.maintainer %]
+   RW+ user/USER/ = @all
+   R              = @all
