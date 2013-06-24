@@ -2,3 +2,5 @@ repo [% repo %]
    RW  master     = [% r.repos.$repo.maintainer %]
    RW+ user/USER/ = @all
    R              = @all
+   config hooks.mailinglist = sysadmin-commits@ml.mageia.org
+   config hooks.emailprefix = [% repo %]
