@@ -1,6 +1,7 @@
 - add repodef_repo.gl template
 - allow defining repos directly in main config file
 - set commits mailing lists
+- set repo descriptions
 
 Version 0.1
 
