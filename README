@@ -1,2 +1,47 @@
 mgagit is a tool used to manage Mageia git repositories.
 
+How it works
+------------
+
+mgagit takes :
+ - an ldap directory containing groups, and users with ssh keys
+ - repositories definitions
+
+And generate the corresponding gitolite configuration and keys directory.
+
+
+Available commands
+------------------
+
+- glconf : Print gitolite configuration
+- glrun  : Update gitolite configuration
+
+
+Configuration
+-------------
+
+Configuration is done in the file /etc/mgagit.conf. The default
+configuration is available in file /usr/share/mgagit/config.
+
+The files are in YAML format.
+
+The following configuration options are available :
+ use_ldap: enable use of ldap to fetch user keys and groups
+ ldapserver: hostname of the ldap server
+ binddn: dn used to authenticate on the ldap server
+ bindpwfile: file containing the password used to authenticate
+ groupbase: the base used to search ldap groups
+ groupfilter: filter to search ldap groups
+ userbase: the base used to search ldap users
+ userfilter: filter to search ldap users
+ uid_username_re: regular expression to extract a username from ldap uid
+ group_re: regular expression to extract group name from cn
+ pubkey_dir: directory containing users ssh keys, used by gitolite
+ tmpl_dir: templates directory
+ gitolite_config: gitolite configuration file
+ repos_config: list of repos definition directories. Use something like
+ this to include a directory containing repos definitions :
+  - prefix: prefix in the repos tree
+    include_dir: path to the directory containing definitions
+    gl_template: template file used to define the repos
+
