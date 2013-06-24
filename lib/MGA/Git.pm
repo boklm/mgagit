@@ -39,8 +39,15 @@ sub load_gitrepos_dir {
 sub load_gitrepos {
     my ($r) = @_;
     $r->{repos} = {};
-    foreach my $include (@{$config->{repos_config}}) {
-        load_gitrepos_dir($r->{repos}, $include);
+    foreach my $repodef (@{$config->{repos_config}}) {
+        load_gitrepos_dir($r->{repos}, $repodef) if $repodef->{include_dir};
+        foreach my $repo ($repodef->{repos} ? @{$repodef->{repos}} : ()) {
+            my $name = "$repodef->{prefix}/$repo->{name}";
+            $r->{repos}{$name} = $repo;
+            my %infos = %$repodef;
+            delete $infos{repos};
+            @{$r->{repos}{$name}}{keys %infos} = values %infos;
+        }
     }
 }
 
