@@ -2,6 +2,7 @@
 - allow defining repos directly in main config file
 - set commits mailing lists
 - set repo descriptions
+- add noemail option, to disable commit emails
 
 Version 0.1
 
