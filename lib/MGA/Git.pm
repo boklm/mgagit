@@ -68,8 +68,7 @@ sub get_ldap {
 sub re {
     my ($re, $txt) = @_;
     my $rr = qr/$config->{$re}/;
-    $txt =~ s/$rr/$1/;
-    return $txt;
+    return $txt =~ m/$rr/ ? $1 : undef;
 }
 
 sub load_groups {
@@ -82,7 +81,7 @@ sub load_groups {
     );
     my $res = $m->as_struct;
     @{$r->{groups}}{map { re('group_re', $_) } keys %$res} =
-        map { [ map { re('uid_username_re', $_) } @{$_->{member}} ] }
+        map { [ map { re('uid_username_re', $_) || () } @{$_->{member}} ] }
         values %$res;
 }
 
