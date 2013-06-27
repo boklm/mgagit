@@ -162,6 +162,7 @@ sub update_gitolite_keydir {
         }
     }
     foreach my $file (keys %users_old) {
+        chomp $users_old{$file};
         if (!$users_new{$file}) {
             print "Removing $file\n";
             unlink "$config->{pubkey_dir}/$file";
@@ -169,7 +170,8 @@ sub update_gitolite_keydir {
         }
     }
     foreach my $file (keys %users_new) {
-        if (!$users_old{$file} || chomp $users_old{$file} ne chomp $users_new{$file}) {
+        chomp $users_new{$file};
+        if (!$users_old{$file} || $users_old{$file} ne $users_new{$file}) {
             print "Writing $file\n";
             write_file("$config->{pubkey_dir}/$file", $users_new{$file});
             $r->{keydir_changed} = 1;
