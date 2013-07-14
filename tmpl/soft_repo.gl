@@ -1,6 +1,7 @@
+[% SET maintainer = r.repos.$repo.maintainer %]
 repo [% repo %]
-   RW  master     = [% r.repos.$repo.maintainer %]
-   RW  release/   = [% r.repos.$repo.maintainer %]
+   RW  master     = [% maintainer %]
+   RW  release/   = [% maintainer %]
    RW+ user/USER/ = @all
    R              = @all
 [% IF r.repos.$repo.mailinglist -%]
