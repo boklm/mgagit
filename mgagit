@@ -55,6 +55,7 @@ sub glconf {
     my %r;
     MGA::Git::load_gitrepos(\%r);
     MGA::Git::load_groups(\%r) if @_ == 1;
+    MGA::Git::load_users(\%r);
     if (my $repo = $_[1]) {
         if (!$r{repos}{$repo}) {
             print STDERR "Cannot find repository $repo\n";
