@@ -94,7 +94,7 @@ sub load_users {
         filter => $config->{userfilter},
     );
     my @users = grep { $_->{sshpublickey} } values %{$m->as_struct};
-    @{$r->{users}}{map { $_->{uid}[0] } @users} = map { $_->{sshpublickey} } @users;
+    @{$r->{users}}{map { $_->{uid}[0] } @users} = @users;
 }
 
 sub get_tmpl {
@@ -155,7 +155,7 @@ sub update_gitolite_keydir {
     my %users_new;
     foreach my $u (keys %{$r->{users}}) {
         my $i = 0;
-        foreach my $key (@{$r->{users}{$u}}) {
+        foreach my $key (@{$r->{users}{$u}{sshpublickey}}) {
             next unless $key;
             $users_new{"$u\@$i.pub"} = $key;
             $i++;
