@@ -16,7 +16,7 @@ repo [% repo %]
    config hooks.emailprefix = [% repo %]
    config gitweb.description = [% r.repos.$repo.description %]
 [% IF r.users.$maintainer -%]
-   config gitweb.owner = [% r.users.$maintainer.cn.0 %] <[% maintainer %]@mageia.org>
+   config gitweb.owner = [% r.users.$maintainer.cn.0 %] - [% maintainer %]
 [% END -%]
 [% IF r.repos.$repo.noemail -%]
    config hooks.noemail = [% r.repos.$repo.noemail %]

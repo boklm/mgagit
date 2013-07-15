@@ -1,3 +1,5 @@
+- soft_repo.gl: remove '<>' from gitweb.owner as gitolite doesn't like this
+
 Version 0.6
 
 - use Git::Repository instead of Git module
