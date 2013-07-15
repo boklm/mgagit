@@ -26,28 +26,68 @@ configuration is available in file /usr/share/mgagit/config.
 The files are in YAML format.
 
 The following configuration options are available :
- use_ldap: enable use of ldap to fetch user keys and groups
- ldapserver: hostname of the ldap server
- binddn: dn used to authenticate on the ldap server
- bindpwfile: file containing the password used to authenticate
- groupbase: the base used to search ldap groups
- groupfilter: filter to search ldap groups
- userbase: the base used to search ldap users
- userfilter: filter to search ldap users
- uid_username_re: regular expression to extract a username from ldap uid
- ldap_users_infos: list of ldap user attributes that we should keep available
- group_re: regular expression to extract group name from cn
- pubkey_dir: directory containing users ssh keys, used by gitolite
- tmpl_dir: templates directory
- gitolite_config: gitolite configuration file
- repodef_dir: directory containing repos definitions (see repos_config)
- repos_config: list of repos definition directories. Use something like
- this to include a directory containing repos definitions :
-  - prefix: prefix in the repos tree
-    git_url: url of a git repository containing definitions, that will be
-             cloned and pulled, in 'repodef_dir'
-    include_dir: alternatively, you can specify the path to a directory
-                 containing definitions (if it's not from a git repository,
-                 or if you don't want to be pulled automatically)
-    gl_template: template file used to define the repos
+
+ use_ldap:
+        enable use of ldap to fetch user keys and groups
+
+ ldapserver:
+        hostname of the ldap server
+
+ binddn:
+        dn used to authenticate on the ldap server
+
+ bindpwfile:
+        file containing the password used to authenticate
+
+ groupbase:
+        the base used to search ldap groups
+
+ groupfilter:
+        filter to search ldap groups
+
+ userbase:
+        the base used to search ldap users
+
+ userfilter:
+        filter to search ldap users
+
+ uid_username_re:
+        regular expression to extract a username from ldap uid
+
+ ldap_users_infos:
+        list of ldap user attributes that we should keep available
+
+ group_re:
+        regular expression to extract group name from cn
+
+ pubkey_dir:
+        directory containing users ssh keys, used by gitolite
+
+ tmpl_dir:
+        templates directory
+
+ gitolite_config:
+        gitolite configuration file
+
+ repodef_dir:
+        directory containing repos definitions (see repos_config)
+
+ repos_config:
+        list of repos definition directories. Use something like
+        this to include a directory containing repos definitions :
+
+    prefix:
+        prefix in the repos tree
+   
+    git_url:
+        url of a git repository containing definitions, that will be
+        cloned and pulled, in 'repodef_dir'
+
+    include_dir:
+        alternatively, you can specify the path to a directory
+        containing definitions (if it's not from a git repository,
+        or if you don't want to be pulled automatically)
+
+    gl_template:
+        template file used to define the repos
 
