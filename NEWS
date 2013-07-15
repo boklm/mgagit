@@ -1,3 +1,4 @@
+Version 0.5
 
 - soft_repo.gl: allow @mga-packagers to push to master and release/
   branches by default, unless lockdown is set to 'yes' for this repo
