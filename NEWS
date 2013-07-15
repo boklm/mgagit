@@ -1,3 +1,6 @@
+
+- use Git::Repository instead of Git module
+
 Version 0.5
 
 - soft_repo.gl: allow @mga-packagers to push to master and release/

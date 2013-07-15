@@ -1,7 +1,7 @@
 package MGA::Git;
 
 use strict;
-use Git;
+use Git::Repository;
 use YAML qw(LoadFile DumpFile);
 use Template;
 use File::Slurp;
@@ -23,12 +23,10 @@ sub load_gitrepos_dir {
         $dir =~ s/\.git$//;
         $infos->{include_dir} = "$config->{repodef_dir}/$dir";
         if (-d $infos->{include_dir}) {
-            my $repo = Git->repository(Directory => $infos->{include_dir});
-            $repo->command('pull');
+            my $repo = Git::Repository->new(work_tree => $infos->{include_dir});
+            $repo->run('pull');
         } else {
-            Git::command('clone', $infos->{git_url}, $infos->{include_dir});
-            my $repo = Git->repository(Directory => $infos->{include_dir});
-            $repo->command('remote', 'add', 'origin', $infos->{git_url});
+            Git::Repository->run(clone => $infos->{git_url}, $infos->{include_dir});
         }
     }
     opendir(my $dh, $infos->{include_dir})
