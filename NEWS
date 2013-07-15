@@ -1,3 +1,5 @@
+Version 0.7
+
 - soft_repo.gl: remove '<>' from gitweb.owner as gitolite doesn't like this
 
 Version 0.6
