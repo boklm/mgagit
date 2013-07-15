@@ -12,6 +12,7 @@ group_re: '^cn=(.+),ou=Group,dc=mageia,dc=org$'
 pubkey_dir: /var/lib/git/.gitolite/keydir
 tmpl_dir: /usr/share/mgagit/tmpl
 gitolite_config: /var/lib/git/.gitolite/conf/gitolite.conf
+repodef_dir: /var/lib/git/repos-config
 repos_config:
   - prefix: software
     include_dir: /var/lib/git/repos/software

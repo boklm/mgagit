@@ -39,9 +39,14 @@ The following configuration options are available :
  pubkey_dir: directory containing users ssh keys, used by gitolite
  tmpl_dir: templates directory
  gitolite_config: gitolite configuration file
+ repodef_dir: directory containing repos definitions (see repos_config)
  repos_config: list of repos definition directories. Use something like
  this to include a directory containing repos definitions :
   - prefix: prefix in the repos tree
-    include_dir: path to the directory containing definitions
+    git_url: url of a git repository containing definitions, that will be
+             cloned and pulled, in 'repodef_dir'
+    include_dir: alternatively, you can specify the path to a directory
+                 containing definitions (if it's not from a git repository,
+                 or if you don't want to be pulled automatically)
     gl_template: template file used to define the repos
 

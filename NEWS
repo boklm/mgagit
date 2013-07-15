@@ -3,6 +3,8 @@
   branches by default, unless lockdown is set to 'yes' for this repo
 - soft_repo.gl: set maintainer as gitweb.owner
 - provide access to users ldap infos from templates
+- in repos_config, allow giving a git_url instead of a directory path,
+  to be cloned and pulled automatically
 
 Version 0.4
 

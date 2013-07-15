@@ -1,9 +1,11 @@
 package MGA::Git;
 
 use strict;
+use Git;
 use YAML qw(LoadFile);
 use Template;
 use File::Slurp;
+use File::Basename;
 use Net::LDAP;
 use feature 'state';
 use Data::Dump qw/dd/;
@@ -16,6 +18,19 @@ my $etc_config = LoadFile($etc_config_file);
 
 sub load_gitrepos_dir {
     my ($repos, $infos) = @_;
+    if (!$infos->{include_dir}) {
+        my ($dir) = fileparse($infos->{git_url});
+        $dir =~ s/\.git$//;
+        $infos->{include_dir} = "$config->{repodef_dir}/$dir";
+        if (-d $infos->{include_dir}) {
+            my $repo = Git->repository(Directory => $infos->{include_dir});
+            $repo->command('pull');
+        } else {
+            Git::command('clone', $infos->{git_url}, $infos->{include_dir});
+            my $repo = Git->repository(Directory => $infos->{include_dir});
+            $repo->command('remote', 'add', 'origin', $infos->{git_url});
+        }
+    }
     opendir(my $dh, $infos->{include_dir})
         || die "Error opening $infos->{include_dir}: $!";
     while (my $file = readdir($dh)) {
@@ -40,7 +55,9 @@ sub load_gitrepos {
     my ($r) = @_;
     $r->{repos} = {};
     foreach my $repodef (@{$config->{repos_config}}) {
-        load_gitrepos_dir($r->{repos}, $repodef) if $repodef->{include_dir};
+        if ($repodef->{include_dir} || $repodef->{git_url}) {
+            load_gitrepos_dir($r->{repos}, $repodef);
+        }
         foreach my $repo ($repodef->{repos} ? @{$repodef->{repos}} : ()) {
             my $name = "$repodef->{prefix}/$repo->{name}";
             $r->{repos}{$name} = $repo;
