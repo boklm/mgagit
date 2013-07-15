@@ -35,6 +35,7 @@ The following configuration options are available :
  userbase: the base used to search ldap users
  userfilter: filter to search ldap users
  uid_username_re: regular expression to extract a username from ldap uid
+ ldap_users_infos: list of ldap user attributes that we should keep available
  group_re: regular expression to extract group name from cn
  pubkey_dir: directory containing users ssh keys, used by gitolite
  tmpl_dir: templates directory

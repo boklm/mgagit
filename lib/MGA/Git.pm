@@ -111,7 +111,12 @@ sub load_users {
         filter => $config->{userfilter},
     );
     my @users = grep { $_->{sshpublickey} } values %{$m->as_struct};
-    @{$r->{users}}{map { $_->{uid}[0] } @users} = @users;
+    my %keepinfos = map { $_ => 1 } @{$config->{ldap_users_infos}};
+    foreach my $user (@users) {
+        my $uid = $user->{uid}[0];
+        my %u = map { $keepinfos{$_} ? ($_ => $user->{$_}) : () } keys %$user;
+        $r->{users}{$uid} = \%u;
+    }
 }
 
 sub get_tmpl {

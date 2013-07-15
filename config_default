@@ -17,3 +17,6 @@ repos_config:
   - prefix: software
     include_dir: /var/lib/git/repos/software
     gl_template: soft_repo
+ldap_users_infos:
+ - cn
+ - sshpublickey
