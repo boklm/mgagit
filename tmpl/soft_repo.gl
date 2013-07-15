@@ -2,6 +2,10 @@
 repo [% repo %]
    RW  master     = [% maintainer %]
    RW  release/   = [% maintainer %]
+[% IF r.repos.$repo.lockdown != 'yes' -%]
+   RW  master     = @mga-packagers
+   RW  release/   = @mga-packagers
+[% END -%]
    RW+ user/USER/ = @all
    R              = @all
 [% IF r.repos.$repo.mailinglist -%]

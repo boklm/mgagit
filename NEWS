@@ -1,4 +1,6 @@
 
+- soft_repo.gl: allow @mga-packagers to push to master and release/
+  branches by default, unless lockdown is set to 'yes' for this repo
 - soft_repo.gl: set maintainer as gitweb.owner
 - provide access to users ldap infos from templates
 
