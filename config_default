@@ -20,3 +20,4 @@ repos_config:
 ldap_users_infos:
  - cn
  - sshpublickey
+www_dir: /var/lib/git/www

@@ -66,6 +66,10 @@ The following configuration options are available :
  tmpl_dir:
         templates directory
 
+ www_dir:
+        output directory where some files are written (repos db dump, and
+        some html pages)
+
  gitolite_config:
         gitolite configuration file
 

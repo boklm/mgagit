@@ -2,7 +2,7 @@ package MGA::Git;
 
 use strict;
 use Git;
-use YAML qw(LoadFile);
+use YAML qw(LoadFile DumpFile);
 use Template;
 use File::Slurp;
 use File::Basename;
@@ -199,6 +199,11 @@ sub update_gitolite_keydir {
             $r->{keydir_changed} = 1;
         }
     }
+}
+
+sub dumpdb {
+    my ($r) = @_;
+    DumpFile($config->{www_dir} . '/repos.yaml', $r);
 }
 
 sub update_gitolite_config {
