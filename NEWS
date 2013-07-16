@@ -1,5 +1,6 @@
 
 - soft_repo.gl: allow pushing tags
+- fix regex for master branch
 
 Version 0.7
 

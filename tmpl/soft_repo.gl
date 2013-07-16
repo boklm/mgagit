@@ -1,10 +1,10 @@
 [% SET maintainer = r.repos.$repo.maintainer %]
 repo [% repo %]
-   RW  master     = [% maintainer %]
+   RW  master$    = [% maintainer %]
    RW  release/   = [% maintainer %]
    RW  refs/tags/ = [% maintainer %]
 [% IF r.repos.$repo.lockdown != 'yes' -%]
-   RW  master     = @mga-packagers
+   RW  master$    = @mga-packagers
    RW  release/   = @mga-packagers
    RW  refs/tags/ = @mga-packagers
 [% END -%]
