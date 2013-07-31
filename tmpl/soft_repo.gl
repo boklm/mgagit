@@ -2,10 +2,12 @@
 repo [% repo %]
    RW  master$    = [% maintainer %]
    RW  distro/    = [% maintainer %]
+   RW  topic/     = [% maintainer %]
    RW  refs/tags/ = [% maintainer %]
 [% IF r.repos.$repo.lockdown != 'yes' -%]
    RW  master$    = @mga-packagers
    RW  distro/    = @mga-packagers
+   RW  topic/     = @mga-packagers
    RW  refs/tags/ = @mga-packagers
 [% END -%]
    RW+ user/USER/ = @all
