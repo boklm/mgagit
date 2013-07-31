@@ -1,11 +1,11 @@
 [% SET maintainer = r.repos.$repo.maintainer %]
 repo [% repo %]
    RW  master$    = [% maintainer %]
-   RW  release/   = [% maintainer %]
+   RW  distro/    = [% maintainer %]
    RW  refs/tags/ = [% maintainer %]
 [% IF r.repos.$repo.lockdown != 'yes' -%]
    RW  master$    = @mga-packagers
-   RW  release/   = @mga-packagers
+   RW  distro/    = @mga-packagers
    RW  refs/tags/ = @mga-packagers
 [% END -%]
    RW+ user/USER/ = @all
