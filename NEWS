@@ -1,3 +1,8 @@
+Version 0.9
+
+- soft_repo.gl: Rename the release/* branches to distro/*
+- soft_repo.gl: Allow topic branches
+
 Version 0.8
 
 - soft_repo.gl: allow pushing tags
