@@ -1,3 +1,7 @@
+Version 0.10
+
+- soft_repo.gl: Simplify how the noemail option works
+
 Version 0.9
 
 - soft_repo.gl: Rename the release/* branches to distro/*
