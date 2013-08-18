@@ -12,16 +12,17 @@ repo [% repo %]
 [% END -%]
    RW+ user/USER/ = @all
    R              = @all
+[% IF r.repos.$repo.noemail -%]
+   config hooks.mailinglist = ""
+[% ELSE -%]
 [% IF r.repos.$repo.mailinglist -%]
    config hooks.mailinglist = [% r.repos.$repo.mailinglist %]
 [% ELSE -%]
    config hooks.mailinglist = soft-commits@ml.mageia.org
 [% END -%]
-   config hooks.emailprefix = [% repo %]
+[% END -%]
+   config hooks.emailprefix = "[% repo %] "
    config gitweb.description = [% r.repos.$repo.description %]
 [% IF r.users.$maintainer -%]
    config gitweb.owner = [% r.users.$maintainer.cn.0 %] - [% maintainer %]
-[% END -%]
-[% IF r.repos.$repo.noemail -%]
-   config hooks.noemail = [% r.repos.$repo.noemail %]
 [% END -%]
