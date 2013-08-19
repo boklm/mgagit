@@ -1,3 +1,5 @@
+- soft_repo.gl: Put maintainer nick in square brackets
+
 Version 0.10
 
 - soft_repo.gl: Simplify how the noemail option works
