@@ -17,7 +17,7 @@ my $etc_config = LoadFile($etc_config_file);
 @{$config}{keys %$etc_config} = values %$etc_config;
 
 sub load_gitrepos_dir {
-    my ($repos, $infos) = @_;
+    my ($r, $infos) = @_;
     if (!$infos->{include_dir}) {
         my ($dir) = fileparse($infos->{git_url});
         $dir =~ s/\.git$//;
@@ -37,13 +37,13 @@ sub load_gitrepos_dir {
             my %i = %$infos;
             $i{prefix} .= '/' . $file;
             $i{include_dir} .= '/' . $file;
-            load_gitrepos_dir($repos, \%i);
+            load_gitrepos_dir($r, \%i);
         } elsif ($file =~ m/(.+)\.repo$/) {
             my $bname = $1;
             my $name = "$infos->{prefix}/$bname";
-            $repos->{$name} = LoadFile("$infos->{include_dir}/$file");
-            $repos->{$name}{name} = $bname;
-            @{$repos->{$name}}{keys %$infos} = values %$infos;
+            $r->{repos}{$name} = LoadFile("$infos->{include_dir}/$file");
+            $r->{repos}{$name}{name} = $bname;
+            @{$r->{repos}{$name}}{keys %$infos} = values %$infos;
         }
     }
     closedir $dh;
@@ -54,7 +54,7 @@ sub load_gitrepos {
     $r->{repos} = {};
     foreach my $repodef (@{$config->{repos_config}}) {
         if ($repodef->{include_dir} || $repodef->{git_url}) {
-            load_gitrepos_dir($r->{repos}, $repodef);
+            load_gitrepos_dir($r, $repodef);
         }
         foreach my $repo ($repodef->{repos} ? @{$repodef->{repos}} : ()) {
             my $name = "$repodef->{prefix}/$repo->{name}";
