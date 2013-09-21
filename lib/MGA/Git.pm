@@ -35,15 +35,24 @@ sub load_gitrepos_dir {
         if (-d "$infos->{include_dir}/$file") {
             next if $file =~ m/^\./;
             my %i = %$infos;
-            $i{prefix} .= '/' . $file;
+            $i{prefix} .= '/' . $file if $i{prefix};
             $i{include_dir} .= '/' . $file;
             load_gitrepos_dir($r, \%i);
-        } elsif ($file =~ m/(.+)\.repo$/) {
+        } elsif ($file =~ m/(.+)\.repo$/ && $infos->{prefix}) {
             my $bname = $1;
             my $name = "$infos->{prefix}/$bname";
             $r->{repos}{$name} = LoadFile("$infos->{include_dir}/$file");
             $r->{repos}{$name}{name} = $bname;
             @{$r->{repos}{$name}}{keys %$infos} = values %$infos;
+        } elsif ($file =~ m/(.+)\.group$/ && exists $infos->{group_prefix}) {
+            my $bname = $1;
+            my $name = $infos->{group_prefix} . $bname;
+            if (exists $r->{groups}{$name}) {
+                print STDERR "Warning: Redifinition of $name group.\n";
+                next;
+            }
+            $r->{groups}{$name} = [ read_file("$infos->{include_dir}/$file") ];
+            chomp @{$r->{groups}{$name}};
         }
     }
     closedir $dh;

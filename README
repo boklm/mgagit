@@ -5,7 +5,7 @@ How it works
 
 mgagit takes :
  - an ldap directory containing groups, and users with ssh keys
- - repositories definitions
+ - repositories and non-ldap groups definitions
 
 And generate the corresponding gitolite configuration and keys directory.
 
@@ -77,12 +77,21 @@ The following configuration options are available :
         directory containing repos definitions (see repos_config)
 
  repos_config:
-        list of repos definition directories. Use something like
-        this to include a directory containing repos definitions :
+        list of repos and / or group definition directories. Use
+        something like this to include a directory containing repos or
+        groups definitions :
 
     prefix:
-        prefix in the repos tree
+        prefix in the repos tree. In case of git_url or include_dir,
+        this is also used to indicate that the included directory
+        defines repos (*.repo files).
    
+    group_prefix:
+        This value is prefixed to the defined group names. This is also
+        used to indicate that the included directory can contain groups
+        definitions (*.group files). If you don't want to have a prefix,
+        but still want to define groups, set an empty string.
+
     git_url:
         url of a git repository containing definitions, that will be
         cloned and pulled, in 'repodef_dir'

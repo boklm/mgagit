@@ -1,4 +1,5 @@
 - soft_repo.gl: Put maintainer nick in square brackets
+- allow non-ldap group definitions
 
 Version 0.10
 
