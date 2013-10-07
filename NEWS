@@ -4,27 +4,33 @@
 - don't copy the repodef options to each repo definition
 - add the repo_conf and origin_conf functions in templates
 
+
 Version 0.10
 
 - soft_repo.gl: Simplify how the noemail option works
+
 
 Version 0.9
 
 - soft_repo.gl: Rename the release/* branches to distro/*
 - soft_repo.gl: Allow topic branches
 
+
 Version 0.8
 
 - soft_repo.gl: allow pushing tags
 - fix regex for master branch
 
+
 Version 0.7
 
 - soft_repo.gl: remove '<>' from gitweb.owner as gitolite doesn't like this
 
+
 Version 0.6
 
 - use Git::Repository instead of Git module
+
 
 Version 0.5
 
@@ -36,13 +42,16 @@ Version 0.5
   to be cloned and pulled automatically
 - dump repos db in a yaml file when running glrun
 
+
 Version 0.4
 
 - fix comparison of old and new ssh keys from ldap
 
+
 Version 0.3
 
 - ignore group members not matching user re
+
 
 Version 0.2
 
@@ -51,6 +60,7 @@ Version 0.2
 - set commits mailing lists
 - set repo descriptions
 - add noemail option, to disable commit emails
+
 
 Version 0.1
 
