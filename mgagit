@@ -38,9 +38,12 @@ END
         run   => \&showconf,
         descr => 'Show YAML mgagit configuration',
         usage => <<END,
-$0 showconf
+$0 showconf [reponame] [optionname]
 
-Show YAML mgagit configuration
+Show the mgagit configuration. If given one argument, it will display
+the configuration for the specified repo. If given two argument, it
+will display the value of the specified option for the specified repo.
+Without any argument, it displays all the configuration.
 END
     },
 );
@@ -90,9 +93,23 @@ sub glrun {
 }
 
 sub showconf {
+    shift;
+    my $res;
     my %r;
     MGA::Git::load_gitrepos(\%r);
-    print YAML::Dump(\%r);
+    usageexit('usage', 'showconf') if @_ > 2;
+    if (@_ == 1) {
+        $res = YAML::Dump($r{repos}{$_[0]});
+    } elsif (@_ == 2) {
+        $res = MGA::Git::repo_config(\%r, @_);
+        $res .= "\n" if defined $res;
+    } else {
+        my $c = $MGA::Git::config;
+        $c->{r} = \%r;
+        $res = YAML::Dump($c);
+    }
+    print defined $res ? $res : "undef\n";
+    exit !defined $res;
 }
 
 if (@ARGV == 0 || !$actions{$ARGV[0]}) {
