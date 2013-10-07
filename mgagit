@@ -2,6 +2,7 @@
 
 use strict;
 use MGA::Git;
+use YAML;
 #use Data::Dump qw/dd/;
 
 my %actions = (
@@ -31,6 +32,15 @@ END
 $0 usage [action]
 
 Show action usage
+END
+    },
+    showconf  => {
+        run   => \&showconf,
+        descr => 'Show YAML mgagit configuration',
+        usage => <<END,
+$0 showconf
+
+Show YAML mgagit configuration
 END
     },
 );
@@ -77,6 +87,12 @@ sub glrun {
     MGA::Git::update_gitolite_keydir(\%r);
     MGA::Git::update_gitolite_config(\%r);
     MGA::Git::run_gitolite(\%r);
+}
+
+sub showconf {
+    my %r;
+    MGA::Git::load_gitrepos(\%r);
+    print YAML::Dump(\%r);
 }
 
 if (@ARGV == 0 || !$actions{$ARGV[0]}) {

@@ -13,8 +13,10 @@ And generate the corresponding gitolite configuration and keys directory.
 Available commands
 ------------------
 
-- glconf : Print gitolite configuration
-- glrun  : Update gitolite configuration
+- glconf   : Print gitolite configuration
+- glrun    : Update gitolite configuration
+- showconf : Display the repos configuration in YAML. This is mainly
+             useful for debugging.
 
 
 Configuration
