@@ -1,6 +1,8 @@
 - soft_repo.gl: Put maintainer nick in square brackets
 - allow non-ldap group definitions
 - add the showconf command, to show repos configuration in yaml
+- don't copy the repodef options to each repo definition
+- add the repo_conf and origin_conf functions in templates
 
 Version 0.10
 

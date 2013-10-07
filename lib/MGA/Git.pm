@@ -43,7 +43,7 @@ sub load_gitrepos_dir {
             my $name = "$infos->{prefix}/$bname";
             $r->{repos}{$name} = LoadFile("$infos->{include_dir}/$file");
             $r->{repos}{$name}{name} = $bname;
-            @{$r->{repos}{$name}}{keys %$infos} = values %$infos;
+            $r->{repos}{$name}{origin} = $infos->{origin};
         } elsif ($file =~ m/(.+)\.group$/ && exists $infos->{group_prefix}) {
             my $bname = $1;
             my $name = $infos->{group_prefix} . $bname;
@@ -62,17 +62,33 @@ sub load_gitrepos {
     my ($r) = @_;
     $r->{repos} = {};
     foreach my $repodef (@{$config->{repos_config}}) {
+        $repodef->{origin} = $repodef->{prefix};
         if ($repodef->{include_dir} || $repodef->{git_url}) {
             load_gitrepos_dir($r, $repodef);
         }
         foreach my $repo ($repodef->{repos} ? @{$repodef->{repos}} : ()) {
             my $name = "$repodef->{prefix}/$repo->{name}";
+            $repo->{origin} = $repodef->{origin};
             $r->{repos}{$name} = $repo;
-            my %infos = %$repodef;
-            delete $infos{repos};
-            @{$r->{repos}{$name}}{keys %infos} = values %infos;
         }
     }
+}
+
+sub origin_config {
+    my ($r, $reponame, $confname) = @_;
+    my $origin = $r->{repos}{$reponame}{origin};
+    foreach my $repodef (@{$config->{repos_config}}) {
+        next unless ($repodef->{prefix} eq $origin);
+        return $repodef->{$confname} if defined $repodef->{$confname};
+        last;
+    }
+    return $config->{$confname};
+}
+
+sub repo_config {
+    my ($r, $reponame, $confname) = @_;
+    my $res = $r->{repos}{$reponame}{$confname};
+    return defined $res ? $res : origin_config($r, $reponame, $confname);
 }
 
 sub get_ldap {
@@ -151,6 +167,8 @@ sub gitolite_repo_config {
         r      => $r,
         repo   => $repo,
         config => $config,
+        repo_conf   => sub { repo_config($r, $repo, @_) },
+        origin_conf => sub { origin_config($r, $repo, @_) },
     };
     return process_tmpl($r->{repos}{$repo}{gl_template}, 'gl', $vars);
 }
