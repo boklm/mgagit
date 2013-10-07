@@ -106,3 +106,32 @@ The following configuration options are available :
     gl_template:
         template file used to define the repos
 
+
+Template variables
+------------------
+
+The following variables are available in all templates :
+
+    config:
+        The general config
+
+    r:
+        The repos, groups and users definitions
+
+The following variables are available in repo definition templates :
+
+    repo:
+        The repo name
+
+    repo_conf:
+        A function to get the value of some configuration option, for
+        the current repo. It will first try to get it from the repo
+        specific configuration, and if not defined will return the
+        configuration from the repo definition origin, or the main
+        configuration.
+
+    origin_conf:
+        This is the same as repo_conf, except that it will skip the repo
+        specific configuration. You will use this function when you
+        don't want the option to be overriden by the repo definition.
+
