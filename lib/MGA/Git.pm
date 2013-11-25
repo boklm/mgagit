@@ -170,7 +170,7 @@ sub gitolite_repo_config {
         repo_conf   => sub { repo_config($r, $repo, @_) },
         origin_conf => sub { origin_config($r, $repo, @_) },
     };
-    return process_tmpl($r->{repos}{$repo}{gl_template}, 'gl', $vars);
+    return process_tmpl(origin_config($r, $repo, 'gl_template'), 'gl', $vars);
 }
 
 sub gitolite_group_config {
